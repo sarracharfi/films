@@ -1,0 +1,113 @@
+/* src/components/Dashboard/Dashboard.css */
+
+/* Fond de la page */
+ion-page {
+  background: linear-gradient(145deg, #1e1e2f, #2e2e44);
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Conteneur des onglets du bas */
+ion-tab-bar {
+  background: #1f1f33;
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: space-around; /* espace uniforme */
+  padding: 5px 0;
+}
+
+/* Onglets */
+ion-tab-button {
+  --color-selected: #ff4081; /* couleur sélectionnée */
+  --color: #fff;              /* texte non sélectionné */
+  transition: transform 0.3s, box-shadow 0.3s;
+  margin: 0 8px; /* espace entre chaque onglet */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Effet hover sur les onglets */
+ion-tab-button:hover {
+  transform: translateY(-5px) rotateX(5deg);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Icônes des onglets */
+ion-tab-button ion-icon {
+  font-size: 28px;
+  margin-bottom: 3px;
+  color: #ff0000; /* icône rouge */
+}
+
+/* Labels des onglets */
+ion-label {
+  font-weight: bold;
+  font-size: 12px;
+  color: #fff; /* texte blanc */
+}
+
+/* Contenu de chaque page */
+ion-router-outlet {
+  padding: 20px;
+}
+
+/* Cartes (movies, favoris, playlist, etc.) */
+ion-card {
+  background: linear-gradient(145deg, #2c2c50, #1f1f33);
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+  transition: transform 0.4s, box-shadow 0.4s;
+  margin-bottom: 20px;
+}
+
+ion-card:hover {
+  transform: translateY(-10px) rotateX(5deg);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+}
+
+/* Textes dans les cartes */
+ion-card-header,
+ion-card-title,
+ion-card-content {
+  color: #fff;
+}
+
+/* Boutons internes (si utilisés dans les cartes) */
+ion-button {
+  --background: #ff4081;
+  --color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+ion-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+}
+
+/* Scroll bar custom pour les longues listes */
+ion-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+ion-content::-webkit-scrollbar-track {
+  background: #1f1f33;
+  border-radius: 10px;
+}
+
+ion-content::-webkit-scrollbar-thumb {
+  background: #ff4081;
+  border-radius: 10px;
+}
+
+/* Responsive : espacement onglets pour mobile */
+@media (max-width: 480px) {
+  ion-tab-button {
+    margin: 0 4px;
+  }
+}

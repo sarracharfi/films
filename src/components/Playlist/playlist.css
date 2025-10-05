@@ -1,0 +1,139 @@
+/* --- Page & Container --- */
+.playlist-content {
+  padding: 1rem;
+  background: linear-gradient(145deg, #e0e0e0, #cfcfcf); /* fond plus clair pour contraste */
+  min-height: 100vh;
+  color: #000; /* texte noir */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.playlist-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* --- Sections --- */
+.playlist-section, .favorites-section {
+  margin-bottom: 2rem;
+}
+
+.playlist-section h2, .favorites-section h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #000; /* texte noir */
+  text-shadow: 1px 1px 2px rgba(255,255,255,0.5); /* léger effet 3D */
+}
+
+/* --- Input Favoris --- */
+.fav-input {
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  background: #fff; /* fond clair */
+  color: #000; /* texte noir */
+  border: 1px solid #999;
+}
+
+.fav-add-btn {
+  background: linear-gradient(145deg, #ff7f50, #ff4500);
+  color: #fff;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+}
+
+/* --- Cards 3D Style --- */
+.movie-card {
+  position: relative;
+  border-radius: 15px;
+  overflow: hidden;
+  background: linear-gradient(145deg, #f0f0f0, #dcdcdc);
+  box-shadow: 5px 5px 15px rgba(0,0,0,0.2), -5px -5px 15px rgba(255,255,255,0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.movie-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 8px 8px 20px rgba(0,0,0,0.3), -8px -8px 20px rgba(255,255,255,0.5);
+}
+
+/* --- Image --- */
+.card-image-container {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.card-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.movie-card:hover .card-image-container img {
+  transform: scale(1.05);
+}
+
+/* --- Delete Icon --- */
+.delete-icon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  color: #ff4d4d;
+  background: rgba(255,255,255,0.7);
+  border-radius: 50%;
+  padding: 6px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+  z-index: 10;
+}
+
+.delete-icon:hover {
+  transform: scale(1.2);
+  background: rgba(255,0,0,0.8);
+}
+
+/* --- Movie Info --- */
+.movie-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0.5rem 0;
+  color: #000; /* texte noir */
+}
+
+.movie-meta {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.95rem;
+  color: #333; /* texte noir plus doux */
+}
+
+.movie-meta ion-icon {
+  vertical-align: middle;
+  margin-right: 0.2rem;
+  color: #ff9900;
+}
+
+/* --- Empty State --- */
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: #555; /* texte noir/gris */
+}
+
+.empty-state ion-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: #777;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .card-image-container {
+    height: 180px;
+  }
+}

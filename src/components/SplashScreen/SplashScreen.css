@@ -1,0 +1,69 @@
+/* Désactiver fond par défaut Ionic */
+ion-content.splash-container {
+  --background: transparent !important;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Overlay sombre pour lisibilité */
+.splash-overlay {
+  background-color: rgba(0, 0, 0, 0.65);
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  color: white;
+}
+
+/* Titre avec effet 3D */
+.splash-title {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-shadow: 3px 3px 5px rgba(0,0,0,0.7);
+  animation: slideDown 1.5s ease forwards;
+}
+
+/* Sous-titre avec effet léger */
+.splash-subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 40px;
+  opacity: 0.9;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+  animation: fadeIn 2s ease forwards;
+}
+
+/* Bouton avec effet 3D */
+.splash-button {
+  border-radius: 30px;
+  padding: 14px 30px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  box-shadow: 0 6px #666;
+  transform: translateY(0);
+  transition: all 0.2s ease-in-out;
+  background: linear-gradient(145deg, #ffffff, #dcdcdc);
+  color: #000;
+}
+
+.splash-button:active {
+  box-shadow: 0 2px #666;
+  transform: translateY(4px);
+}
+
+/* Animation fade-in */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Animation slide-down pour le titre */
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
+}

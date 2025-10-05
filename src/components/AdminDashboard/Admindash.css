@@ -1,0 +1,356 @@
+/* Admindash.css */
+
+/* Variables de couleurs */
+:root {
+  --primary-red: #ff0000;
+  --dark-red: #cc0000;
+  --black: #000000;
+  --dark-gray: #333333;
+  --light-gray: #666666;
+  --white: #ffffff;
+  --shadow-3d: 0 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px rgba(0, 0, 0, 0.19);
+  --shadow-hover: 0 8px 16px rgba(0, 0, 0, 0.4), 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Styles généraux */
+.admin-content {
+  --background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+  margin-bottom: 80px;
+}
+
+.admin-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Titre principal avec effet 3D */
+.admin-title {
+  color: var(--black);
+  font-size: 2.5rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 
+    3px 3px 0 var(--dark-gray),
+    6px 6px 0 rgba(0, 0, 0, 0.2);
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.admin-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--black), var(--primary-red), var(--black));
+  border-radius: 2px;
+}
+
+/* Sections */
+section {
+  margin-bottom: 40px;
+  background: var(--white);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: var(--shadow-3d);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  transform: perspective(1000px) rotateX(0deg);
+  transition: all 0.3s ease;
+}
+
+section:hover {
+  transform: perspective(1000px) rotateX(1deg);
+  box-shadow: var(--shadow-hover);
+}
+
+section h2 {
+  color: var(--black);
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+  border-left: 4px solid var(--primary-red);
+  padding-left: 10px;
+}
+
+/* Cartes de films avec effet 3D */
+.movie-card {
+  background: linear-gradient(145deg, #ffffff, #f0f0f0);
+  border-radius: 12px;
+  margin: 10px 0;
+  box-shadow: var(--shadow-3d);
+  border: none;
+  transform: perspective(500px) rotateY(0deg) translateZ(0);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+}
+
+.movie-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-red), var(--dark-red));
+}
+
+.movie-card:hover {
+  transform: perspective(500px) rotateY(5deg) translateY(-5px) translateZ(10px);
+  box-shadow: var(--shadow-hover);
+}
+
+.movie-poster {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 8px 8px 0 0;
+  transition: transform 0.3s ease;
+}
+
+.movie-card:hover .movie-poster {
+  transform: scale(1.05);
+}
+
+/* Contenu des cartes */
+ion-card-header {
+  padding: 15px 15px 5px;
+}
+
+ion-card-title {
+  color: var(--black) !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+ion-card-content {
+  padding: 10px 15px 15px;
+}
+
+ion-card-content p {
+  color: var(--dark-gray);
+  font-size: 0.9rem;
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+}
+
+/* Icônes dans le contenu */
+ion-icon {
+  color: var(--primary-red);
+  margin-right: 5px;
+  font-size: 1.1rem;
+}
+
+/* Grid et layout */
+ion-grid {
+  --ion-grid-padding: 10px;
+}
+
+ion-row {
+  margin: 0 -10px;
+}
+
+ion-col {
+  padding: 10px;
+}
+
+/* Loading spinner */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+}
+
+.loading-container p {
+  color: var(--black);
+  font-size: 1.2rem;
+  margin-top: 15px;
+  font-weight: 600;
+}
+
+/* NAVBAR NOIRE ET ROUGE */
+.navbar-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 80px;
+  z-index: 1000;
+  background: var(--black);
+  border-top: 3px solid var(--primary-red);
+  box-shadow: 0 -4px 20px rgba(255, 0, 0, 0.3);
+}
+
+.navbar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.9;
+}
+
+.navbar-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 10px;
+  background: rgba(0, 0, 0, 0.95);
+}
+
+/* Boutons de la navbar */
+.navbar-overlay ion-tab-button {
+  flex: 1;
+  max-width: 33.33%;
+  height: 100%;
+  --color: var(--light-gray);
+  --color-selected: var(--primary-red);
+  --background: transparent;
+  --background-focused: transparent;
+  --ripple-color: var(--primary-red);
+  position: relative;
+  overflow: hidden;
+}
+
+.navbar-overlay ion-tab-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 3px;
+  background: var(--primary-red);
+  transition: width 0.3s ease;
+}
+
+.navbar-overlay ion-tab-button.tab-selected::before {
+  width: 80%;
+}
+
+.navbar-overlay ion-tab-button.tab-selected {
+  --color: var(--primary-red);
+  background: linear-gradient(to top, rgba(255, 0, 0, 0.1), transparent);
+}
+
+/* Icônes navbar */
+.navbar-overlay ion-icon {
+  font-size: 28px;
+  margin-bottom: 6px;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.5));
+  transition: all 0.3s ease;
+}
+
+.navbar-overlay ion-tab-button.tab-selected ion-icon {
+  color: var(--primary-red);
+  transform: translateY(-2px);
+  filter: drop-shadow(0 0 8px rgba(255, 0, 0, 0.6));
+}
+
+.navbar-overlay ion-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Toast personnalisé */
+ion-toast {
+  --background: var(--black);
+  --color: var(--white);
+  --border-radius: 8px;
+  --box-shadow: var(--shadow-3d);
+}
+
+/* Effets 3D supplémentaires pour les boutons */
+ion-button {
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  --border-radius: 8px;
+  --transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+ion-button:hover {
+  --box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-title {
+    font-size: 2rem;
+  }
+  
+  section h2 {
+    font-size: 1.5rem;
+  }
+  
+  .navbar-overlay ion-icon {
+    font-size: 24px;
+  }
+  
+  .navbar-overlay ion-label {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-container {
+    padding: 15px;
+  }
+  
+  .admin-title {
+    font-size: 1.8rem;
+  }
+  
+  section {
+    padding: 15px;
+  }
+}
+
+/* Animation d'entrée pour les sections */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) perspective(1000px) rotateX(-5deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) perspective(1000px) rotateX(0deg);
+  }
+}
+
+section {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+section:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+section:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+section:nth-child(4) {
+  animation-delay: 0.3s;
+}
