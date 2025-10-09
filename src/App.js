@@ -1,4 +1,4 @@
-// src/App.js (version alternative)
+// src/App.js
 import React, { useState, useEffect } from "react";
 import { IonApp } from "@ionic/react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
@@ -11,7 +11,8 @@ import Movies from "./components/Movies/Movies";
 import Matching from "./components/Matching/Matching";
 import AdminDashboard from "./components/AdminDashboard/AdminDashboard";
 import UsersPage from "./components/UsersPage/UsersPage";
-
+import ProfileAdmin from "./components/ProfileAdmin/ProfileAdmin";
+ 
 /* Firebase Auth */
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase/config";
@@ -26,7 +27,7 @@ import "@ionic/react/css/float-elements.css";
 import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/flex-utils.css";
 import "@ionic/react/css/display.css";
-import ProfileAdmin from "./components/ProfileAdmin/ProfileAdmin";
+import Films from "./components/Films/Films";
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -58,6 +59,7 @@ function App() {
           <Route path="/admin-dashboard" element={<AdminDashboard currentUser={currentUser} />} />
           <Route path="/users" element={<UsersPage currentUser={currentUser} />} />
           <Route path="/profile" element={<ProfileAdmin currentUser={currentUser} />} />
+          <Route path="/films" element={<Films currentUser={currentUser} />} /> {/* ✅ Nouvelle route */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Router>

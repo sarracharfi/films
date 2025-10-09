@@ -17,22 +17,42 @@ const Movies = ({ currentUser }) => {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
 
-  // 🔹 Charger les films depuis Firebase (admin)
   useEffect(() => {
-    const moviesRef = ref(db, "movies");
-    const unsubscribe = onValue(moviesRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        const moviesArray = Object.values(data).map(m => ({ id: m.id, ...m }));
-        setMovies(moviesArray);
-      }
-      setLoading(false);
+    const adminMoviesRef = ref(db, "movies");
+    const userMoviesRef = ref(db, "myMovies");
+
+    const mergeMovies = (adminData, userData) => {
+      const adminArray = adminData ? Object.values(adminData) : [];
+      const userArray = userData ? Object.values(userData) : [];
+      const ids = new Set();
+      const merged = [];
+
+      [...adminArray, ...userArray].forEach(movie => {
+        if (!ids.has(movie.id)) {
+          ids.add(movie.id);
+          merged.push(movie);
+        }
+      });
+
+      return merged;
+    };
+
+    const unsubscribeAdmin = onValue(adminMoviesRef, (snapshot) => {
+      const adminData = snapshot.val();
+      onValue(userMoviesRef, (snapUser) => {
+        const userData = snapUser.val();
+        const merged = mergeMovies(adminData, userData);
+        setMovies(merged);
+        setLoading(false);
+      });
     });
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribeAdmin();
+    };
   }, []);
 
-  // 🔹 Charger favoris et playlist de l'utilisateur
+  // 🔹 Favoris et Playlist
   useEffect(() => {
     if (!currentUser?.uid) return;
 
@@ -41,14 +61,12 @@ const Movies = ({ currentUser }) => {
 
     const unsubscribeFav = onValue(favRef, snapshot => {
       const data = snapshot.val() || {};
-      const favArray = Object.keys(data).map(key => ({ id: key, ...data[key] }));
-      setFavorites(favArray);
+      setFavorites(Object.keys(data).map(k => ({ id: k, ...data[k] })));
     });
 
     const unsubscribePlaylist = onValue(playlistRef, snapshot => {
       const data = snapshot.val() || {};
-      const plArray = Object.keys(data).map(key => ({ id: key, ...data[key] }));
-      setPlaylist(plArray);
+      setPlaylist(Object.keys(data).map(k => ({ id: k, ...data[k] })));
     });
 
     return () => {
@@ -57,7 +75,6 @@ const Movies = ({ currentUser }) => {
     };
   }, [currentUser]);
 
-  // 🔹 Favoris
   const toggleFavorite = async (movie) => {
     if (!currentUser?.uid) {
       setToastMessage('Veuillez vous connecter pour gérer les favoris !');
@@ -79,9 +96,6 @@ const Movies = ({ currentUser }) => {
     setShowToast(true);
   };
 
-  const isFavorite = (id) => favorites.some(f => f.id === id);
-
-  // 🔹 Playlist
   const togglePlaylist = async (movie) => {
     if (!currentUser?.uid) {
       setToastMessage('Veuillez vous connecter pour gérer la playlist !');
@@ -103,70 +117,54 @@ const Movies = ({ currentUser }) => {
     setShowToast(true);
   };
 
+  const isFavorite = (id) => favorites.some(f => f.id === id);
   const isInPlaylist = (id) => playlist.some(p => p.id === id);
 
-  // 🔹 Helpers
-  const formatDuration = (minutes) => {
-    if (!minutes) return 'N/A';
-    const h = Math.floor(minutes / 60);
-    const m = minutes % 60;
-    return `${h}h${m.toString().padStart(2, '0')}m`;
-  };
   const formatYear = (date) => date ? new Date(date).getFullYear() : 'N/A';
 
-  const renderMovieCard = (movie) => {
-    if (!movie?.id) return null;
-    const fav = isFavorite(movie.id);
-    const inPl = isInPlaylist(movie.id);
-
-    return (
-      <IonCol key={movie.id} size="6" size-md="4" size-lg="3">
-        <IonCard className="movie-card">
-          <div className="card-image-container">
-            <img
-              src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '/assets/images/poster-placeholder.jpg'}
-              alt={movie.title}
-              className="movie-poster"
-              onError={e => e.target.src = '/assets/images/poster-placeholder.jpg'}
-            />
-            <div className="card-overlay">
-              <IonButton fill="clear" className="play-button">
-                <IonIcon icon={playCircle} />
-              </IonButton>
-            </div>
-            <IonButton 
-              fill="clear" 
-              className={`favorite-button ${fav ? 'favorited' : ''}`}
-              onClick={() => toggleFavorite(movie)}
-            >
-              <IonIcon icon={fav ? heart : heartOutline} />
+  const renderMovieCard = (movie) => (
+    <IonCol key={movie.id} size="6" size-md="4" size-lg="3">
+      <IonCard className="movie-card">
+        <div className="card-image-container">
+          <img
+            src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '/assets/images/poster-placeholder.jpg'}
+            alt={movie.title}
+            className="movie-poster"
+          />
+          <div className="card-overlay">
+            <IonButton fill="clear" className="play-button">
+              <IonIcon icon={playCircle} />
             </IonButton>
-            <div className="rating-chip">
-              <IonIcon icon={star} /> {movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'}
-            </div>
           </div>
-          <IonCardHeader>
-            <IonCardTitle className="movie-title">{movie.title}</IonCardTitle>
-          </IonCardHeader>
-          <IonCardContent>
-            <div className="movie-info">
-              <div className="movie-meta">
-                <span className="duration"><IonIcon icon={time} /> {formatDuration(movie.runtime)}</span>
-                <span className="year">{formatYear(movie.release_date)}</span>
-              </div>
-              <IonButton 
-                expand="block" 
-                color={inPl ? 'danger' : 'primary'}
-                onClick={() => togglePlaylist(movie)}
-              >
-                {inPl ? 'Supprimer de la Playlist' : '+ Playlist'}
-              </IonButton>
-            </div>
-          </IonCardContent>
-        </IonCard>
-      </IonCol>
-    );
-  };
+          <IonButton 
+            fill="clear" 
+            className={`favorite-button ${isFavorite(movie.id) ? 'favorited' : ''}`}
+            onClick={() => toggleFavorite(movie)}
+          >
+            <IonIcon icon={isFavorite(movie.id) ? heart : heartOutline} />
+          </IonButton>
+          <div className="rating-chip">
+            <IonIcon icon={star} /> {movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'}
+          </div>
+        </div>
+        <IonCardHeader>
+          <IonCardTitle className="movie-title">{movie.title}</IonCardTitle>
+        </IonCardHeader>
+        <IonCardContent>
+          <div className="movie-meta">
+            <span className="year">{formatYear(movie.release_date)}</span>
+          </div>
+          <IonButton 
+            expand="block" 
+            color={isInPlaylist(movie.id) ? 'danger' : 'primary'}
+            onClick={() => togglePlaylist(movie)}
+          >
+            {isInPlaylist(movie.id) ? 'Supprimer de la Playlist' : '+ Playlist'}
+          </IonButton>
+        </IonCardContent>
+      </IonCard>
+    </IonCol>
+  );
 
   if (loading) return (
     <IonPage>
@@ -182,11 +180,9 @@ const Movies = ({ currentUser }) => {
   return (
     <IonPage>
       <IonContent className="movies-content">
-        <div className="movies-container">
-          <IonGrid>
-            <IonRow>{movies.slice(0, 12).map(renderMovieCard)}</IonRow>
-          </IonGrid>
-        </div>
+        <IonGrid>
+          <IonRow>{movies.map(renderMovieCard)}</IonRow>
+        </IonGrid>
 
         <IonToast
           isOpen={showToast}

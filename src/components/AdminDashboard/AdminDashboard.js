@@ -5,7 +5,7 @@ import {
   IonGrid, IonRow, IonCol, IonSpinner, IonToast, IonTabButton, IonLabel, IonIcon
 } from "@ionic/react";
 import { time, star, film, people, person } from "ionicons/icons";
-import { ref, update } from "firebase/database";
+import { ref, update, onValue } from "firebase/database";
 import { db } from "../../firebase/config";
 import "./Admindash.css";
 
@@ -17,7 +17,7 @@ const AdminDashboard = () => {
 
   const API_KEY = "6da521a9675991f3a1e3258c35bb11cc";
 
-  // 🔹 Catégories à charger
+  // 🔹 Catégories à charger depuis TMDb
   const categories = [
     { name: "Animation", id: 16 },
     { name: "Action", id: 28 },
@@ -25,7 +25,7 @@ const AdminDashboard = () => {
     { name: "Science-Fiction", id: 878 },
   ];
 
-  // 🔹 Charger les films depuis TMDb et sauvegarder dans Firebase
+  // 🔹 Charger les films depuis TMDb
   useEffect(() => {
     const fetchAndSaveMovies = async () => {
       try {
@@ -38,7 +38,7 @@ const AdminDashboard = () => {
         }
         setMovies(moviesByCat);
 
-        // Sauvegarde dans Firebase
+        // Sauvegarde dans Firebase TMDb (optionnel)
         const moviesRef = ref(db, "movies");
         const moviesObject = {};
         Object.values(moviesByCat).flat().forEach((movie) => {
@@ -60,6 +60,24 @@ const AdminDashboard = () => {
       }
     };
     fetchAndSaveMovies();
+  }, []);
+
+  // 🔹 Écouter les films ajoutés/modifiés/supprimés depuis Films.js
+  useEffect(() => {
+    const myMoviesRef = ref(db, "myMovies"); // ton noeud perso
+    const unsubscribe = onValue(myMoviesRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        setMovies(prev => ({ 
+          ...prev, 
+          "Mes Films": Object.values(data) 
+        }));
+      } else {
+        setMovies(prev => ({ ...prev, "Mes Films": [] }));
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const renderMovieCard = (movie) => (
@@ -105,7 +123,7 @@ const AdminDashboard = () => {
         <div className="admin-container">
           <h1 className="admin-title">🎬 Dashboard Administrateur</h1>
 
-          {/* 🔹 Films par catégorie */}
+          {/* 🔹 Films par catégorie et "Mes Films" */}
           {Object.keys(movies).map((cat) => (
             <section key={cat}>
               <h2>{cat}</h2>
@@ -142,7 +160,7 @@ const AdminDashboard = () => {
             <IonIcon icon={person} />
             <IonLabel>Profile</IonLabel>
           </IonTabButton>
-          <IonTabButton href="/admin-dashboard">
+          <IonTabButton href="/Films">
             <IonIcon icon={film} />
             <IonLabel>Films</IonLabel>
           </IonTabButton>
